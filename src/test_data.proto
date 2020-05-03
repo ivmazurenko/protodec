@@ -1,0 +1,73 @@
+syntax = "proto3";
+package protodec;
+
+import "google/protobuf/timestamp.proto";
+
+message Person {
+  
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+
+  message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+  }
+
+  string name = 1;
+  int32 id = 2;
+  string email = 3;
+  repeated PhoneNumber phones = 4;
+  google.protobuf.Timestamp last_updated = 5;
+}
+
+message AddressBook {
+  repeated Person people = 1;
+}
+
+message StringWrapper {
+  string value = 1;
+}
+
+message StringWrapperWrapper {
+  StringWrapper value = 1;
+}
+
+message I32Wrapper {
+  int32 value = 1;
+}
+
+message BigObject {
+  AddressBook address_book = 1;
+  DifferentNumbersWrapper different_numbers_wrapper = 2; 
+}
+
+message DifferentNumbersWrapper {
+  double value_double = 1;
+  int32 value_int32 = 2;
+  int64 value_int64 = 3;
+  uint32 value_uint32 = 4;
+  uint64 value_uint64 = 5;
+  sint32 value_sint32 = 6;
+  sint64 value_sint64 = 7;
+  fixed32 value_fixed32 = 8;
+  fixed64 value_fixed64 = 9;
+  sfixed32 value_sfixed32 = 10;
+  sfixed64 value_sfixed64 = 11;
+}
+
+message Ta {
+  message Tb {
+    message Tc {
+      string number = 1;
+    }
+
+    string name = 1;
+    string email = 3;
+    repeated Tc tcs = 4;
+  }
+  Tb tb = 1;
+}
+

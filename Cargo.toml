@@ -1,0 +1,15 @@
+[package]
+name = "protodec"
+version = "0.1.0"
+authors = ["Илья Мазуренко <ivmazurenko@yandex.ru>"]
+edition = "2018"
+
+[dependencies]
+tokio = { version = "*",  features = ["full"] }
+iced = { version = "*", features = ["tokio"] }
+protobuf = { version = "2" }
+uuid = { version ="*",  features = ["v4"] }
+byteorder = "*"
+
+[build-dependencies]
+protoc-rust = "2.14.0"
