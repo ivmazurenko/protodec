@@ -1,4 +1,4 @@
-use crate::{error::EmptyError, key::Key, varint, wire_type::WireType};
+use crate::{error::ProtodecError, key::Key, varint, wire_type::WireType};
 
 #[derive(Debug, Clone)]
 pub enum Data {
@@ -24,7 +24,7 @@ pub enum Data {
     },
 }
 
-pub fn take_data(key: Key, buffer: &[u8]) -> Result<(Data, &[u8]), EmptyError> {
+pub fn take_data(key: Key, buffer: &[u8]) -> Result<(Data, &[u8]), ProtodecError> {
     use Data::*;
     let field_number = key.field_number;
     match key.wire_type {
@@ -41,7 +41,12 @@ pub fn take_data(key: Key, buffer: &[u8]) -> Result<(Data, &[u8]), EmptyError> {
 
         WireType::Size64 => {
             if buffer.len() < 8 {
-                return Err(EmptyError {});
+                return Err(ProtodecError {
+                    message: format!(
+                        "Error. Buffer length {} can't be less then 8 here.",
+                        buffer.len()
+                    ),
+                });
             }
 
             let (buffer, rest) = buffer.split_at(8);
@@ -64,13 +69,22 @@ pub fn take_data(key: Key, buffer: &[u8]) -> Result<(Data, &[u8]), EmptyError> {
             ))
         }
 
-        WireType::StartGroup => Err(EmptyError {}),
+        WireType::StartGroup => Err(ProtodecError {
+            message: "Error. Not expected start group occured".into(),
+        }),
 
-        WireType::EndGroup => Err(EmptyError {}),
+        WireType::EndGroup => Err(ProtodecError {
+            message: "Error. Not expected end group occured".into(),
+        }),
 
         WireType::Size32 => {
             if buffer.len() < 4 {
-                return Err(EmptyError {});
+                return Err(ProtodecError {
+                    message: format!(
+                        "Error. Buffer length {} can't be less then 4 here.",
+                        buffer.len()
+                    ),
+                });
             }
 
             let (buffer, rest) = buffer.split_at(4);
@@ -83,6 +97,8 @@ pub fn take_data(key: Key, buffer: &[u8]) -> Result<(Data, &[u8]), EmptyError> {
             ))
         }
 
-        WireType::Invalid => Err(EmptyError {}),
+        WireType::Invalid => Err(ProtodecError {
+            message: "Error. wire type is invalid.".into(),
+        }),
     }
 }

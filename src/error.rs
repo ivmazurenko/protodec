@@ -1,9 +1,13 @@
 #[derive(Debug, Clone)]
-pub struct EmptyError {}
+pub struct ProtodecError {
+	pub message: String,
+}
 
-impl From<std::io::Error> for EmptyError {
-    fn from(err: std::io::Error) -> Self {
-        println!("error happens: {}", err);
-        EmptyError {}
-    }
+impl From<std::io::Error> for ProtodecError {
+	fn from(err: std::io::Error) -> Self {
+		println!("error happens: {}", err);
+		ProtodecError {
+			message: err.to_string(),
+		}
+	}
 }

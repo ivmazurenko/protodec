@@ -1,8 +1,8 @@
-use crate::{error::EmptyError, test_data::*};
+use crate::{error::ProtodecError, test_data::*};
 use protobuf::Message;
 use std::path::PathBuf;
 
-pub async fn load_test_proto_object() -> Result<Vec<u8>, EmptyError> {
+pub async fn load_test_proto_object() -> Result<Vec<u8>, ProtodecError> {
     let mut person = Person::new();
 
     person.set_name("Ivan".into());
@@ -54,7 +54,7 @@ pub async fn load_test_proto_object() -> Result<Vec<u8>, EmptyError> {
     Ok(buffer)
 }
 
-pub async fn load_file_from_fs(path: PathBuf) -> Result<Vec<u8>, EmptyError> {
+pub async fn load_file_from_fs(path: PathBuf) -> Result<Vec<u8>, ProtodecError> {
     let buffer = tokio::fs::read(path).await?;
     Ok(buffer)
 }

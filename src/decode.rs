@@ -1,7 +1,7 @@
-use crate::error::EmptyError;
+use crate::error::ProtodecError;
 use crate::{data, data::Data, key};
 
-pub fn decode_message(buffer: &[u8]) -> Result<Vec<Data>, EmptyError> {
+pub fn decode_message(buffer: &[u8]) -> Result<Vec<Data>, ProtodecError> {
     let mut result: Vec<Data> = vec![];
 
     let mut buf = buffer;

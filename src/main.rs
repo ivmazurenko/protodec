@@ -2,7 +2,7 @@ use iced::{
     button, executor, Application, Button, Column, Command, Container, Element, Row, Settings, Text,
 };
 use protodec::{
-    binary_proto_object_loader, data::Data, data_view_model::DataViewModel, error::EmptyError,
+    binary_proto_object_loader, data::Data, data_view_model::DataViewModel, error::ProtodecError,
     format,
 };
 use std::path::PathBuf;
@@ -41,7 +41,7 @@ struct ProtoDecFlags {
 #[derive(Debug, Clone)]
 enum UiMessage {
     OpenFile,
-    FileLoaded(Result<Vec<u8>, EmptyError>),
+    FileLoaded(Result<Vec<u8>, ProtodecError>),
     DecodeChunkAsMessage(Uuid),
     DecodeChunkAsUtf8String(Uuid),
     Toggle(Uuid),
