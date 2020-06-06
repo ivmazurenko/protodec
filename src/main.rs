@@ -1,5 +1,6 @@
 use iced::{
-    button, executor, Application, Button, Column, Command, Container, Element, Row, Settings, Text,
+    button, executor, scrollable, Align, Application, Button, Column, Command, Container, Element,
+    Length, Row, Scrollable, Settings, Text,
 };
 use protodec::{
     binary_proto_object_loader, data::Data, data_view_model::DataViewModel, error::ProtodecError,
@@ -30,7 +31,10 @@ enum ProtoDec {
     InitialState {
         open_file_button_state: button::State,
     },
-    Decoding(DataViewModel),
+    Decoding {
+        scroll: scrollable::State,
+        data_view_model: DataViewModel,
+    },
 }
 
 #[derive(Default)]
@@ -101,34 +105,44 @@ impl ProtoDec {
 
             UiMessage::FileLoaded(x) => match x {
                 Ok(buffer) => {
-                    *self = ProtoDec::Decoding(
-                        Data::Chunk {
+                    *self = ProtoDec::Decoding {
+                        scroll: scrollable::State::new(),
+                        data_view_model: Data::Chunk {
                             buffer,
                             field_number: 0,
                         }
                         .into(),
-                    );
+                    };
                     Command::none()
                 }
                 Err(e) => panic!(e),
             },
 
             UiMessage::DecodeChunkAsMessage(uuid) => {
-                if let ProtoDec::Decoding(data_view_model) = self {
+                if let ProtoDec::Decoding {
+                    data_view_model, ..
+                } = self
+                {
                     data_view_model.decode_as_message(uuid);
                 }
                 Command::none()
             }
 
             UiMessage::Toggle(uuid) => {
-                if let ProtoDec::Decoding(data_view_model) = self {
+                if let ProtoDec::Decoding {
+                    data_view_model, ..
+                } = self
+                {
                     data_view_model.toggle(uuid);
                 }
                 Command::none()
             }
 
             UiMessage::DecodeChunkAsUtf8String(uuid) => {
-                if let ProtoDec::Decoding(data_view_model) = self {
+                if let ProtoDec::Decoding {
+                    data_view_model, ..
+                } = self
+                {
                     data_view_model.decode_as_utf8_string(uuid);
                 }
                 Command::none()
@@ -142,10 +156,28 @@ impl ProtoDec {
         match self {
             ProtoDec::InitialState {
                 open_file_button_state,
-            } => Button::new(open_file_button_state, Text::new("open file"))
-                .on_press(UiMessage::OpenFile)
+            } => Container::new(
+                Column::new()
+                    .width(Length::Fill)
+                    .align_items(Align::Center)
+                    .spacing(40)
+                    .push(Text::new("Protobuf Decoder"))
+                    .push(Text::new("To open a file use the command line argument, for example a $protodec binary_file"))
+                    .push(
+                        Button::new(open_file_button_state, Text::new("Open example file"))
+                            .on_press(UiMessage::OpenFile),
+                    ),
+            )
+            .width(Length::Fill)
+            .into(),
+            ProtoDec::Decoding {
+                data_view_model,
+                scroll,
+            } => Scrollable::new(scroll)
+                .width(Length::Fill)
+                .height(Length::Fill)
+                .push(view_as_tree(data_view_model))
                 .into(),
-            ProtoDec::Decoding(data_view_model) => view_as_tree(data_view_model),
         }
     }
 }
@@ -164,8 +196,9 @@ fn view_as_tree(data_view_model: &mut DataViewModel) -> Element<UiMessage> {
         } => {
             let value_text = create_blue_text(kind.get_value_as_string(*value));
 
-            let toggle_button =
-                Button::new(button_state, Text::new("Toggle")).on_press(UiMessage::Toggle(*uuid));
+            let toggle_button = Button::new(button_state, Text::new("Toggle"))
+                .on_press(UiMessage::Toggle(*uuid))
+                .padding(1);
 
             Container::new(
                 Row::new()
@@ -185,8 +218,9 @@ fn view_as_tree(data_view_model: &mut DataViewModel) -> Element<UiMessage> {
         } => {
             let value_text = create_blue_text(kind.get_value_as_string(buffer));
 
-            let toggle_button =
-                Button::new(button_state, Text::new("Toggle")).on_press(UiMessage::Toggle(*uuid));
+            let toggle_button = Button::new(button_state, Text::new("Toggle"))
+                .on_press(UiMessage::Toggle(*uuid))
+                .padding(1);
 
             Container::new(
                 Row::new()
@@ -206,8 +240,9 @@ fn view_as_tree(data_view_model: &mut DataViewModel) -> Element<UiMessage> {
         } => {
             let value_text = create_blue_text(kind.get_value_as_string(buffer));
 
-            let toggle_button =
-                Button::new(button_state, Text::new("Toggle")).on_press(UiMessage::Toggle(*uuid));
+            let toggle_button = Button::new(button_state, Text::new("Toggle"))
+                .on_press(UiMessage::Toggle(*uuid))
+                .padding(1);
 
             Container::new(
                 Row::new()
@@ -225,14 +260,16 @@ fn view_as_tree(data_view_model: &mut DataViewModel) -> Element<UiMessage> {
             decode_as_utf8_button_state,
             ..
         } => {
-            let value_text = create_red_text(format::format_as_ascii_and_hex(buffer));
+            let value_text = create_black_text(format::format_as_ascii_and_hex(buffer));
 
             let decode_as_message_button =
                 Button::new(decode_as_message_button_state, Text::new("Message"))
-                    .on_press(UiMessage::DecodeChunkAsMessage(*uuid));
+                    .on_press(UiMessage::DecodeChunkAsMessage(*uuid))
+                    .padding(1);
             let decode_as_utf8_string_button =
                 Button::new(decode_as_utf8_button_state, Text::new("UTF-8"))
-                    .on_press(UiMessage::DecodeChunkAsUtf8String(*uuid));
+                    .on_press(UiMessage::DecodeChunkAsUtf8String(*uuid))
+                    .padding(1);
 
             Container::new(
                 Row::new()
@@ -281,8 +318,4 @@ fn create_black_text(value: String) -> Text {
 
 fn create_green_text(value: String) -> Text {
     Text::new(value).color([0.0, 0.8, 0.0])
-}
-
-fn create_red_text(value: String) -> Text {
-    Text::new(value).color([0.8, 0.0, 0.0])
 }
