@@ -5,7 +5,7 @@ authors = ["Илья Мазуренко <ivmazurenko@yandex.ru>"]
 edition = "2018"
 
 [dependencies]
-tokio = { version = "*",  features = ["full"] }
+tokio = { version = "*",  features = ["fs"] }
 iced = { version = "*", features = ["tokio"] }
 protobuf = { version = "2" }
 uuid = { version ="*",  features = ["v4"] }

@@ -1,5 +1,4 @@
-use crate::error::ProtodecError;
-use crate::{data, data::Data, key};
+use crate::{data, data::Data, error::ProtodecError, key};
 
 pub fn decode_message(buffer: &[u8]) -> Result<Vec<Data>, ProtodecError> {
     let mut result: Vec<Data> = vec![];
@@ -149,5 +148,21 @@ mod tests {
         assert_variant!(actual[8], Data::Fixed64{..});
         assert_variant!(actual[9], Data::Fixed32{..});
         assert_variant!(actual[10], Data::Fixed64{..});
+    }
+
+    #[test]
+    fn parses_and_decodes_test_data_for_string_with_integers() {
+        let buffer: Vec<u8> = vec![
+            10, 101, 10, 99, 10, 4, 73, 118, 97, 110, 16, 172, 2, 26, 16, 105, 118, 97, 110, 64,
+            115, 109, 105, 114, 110, 111, 118, 46, 99, 111, 109, 34, 15, 10, 11, 56, 57, 48, 54,
+            57, 48, 54, 50, 54, 54, 54, 16, 1, 34, 15, 10, 11, 56, 57, 48, 51, 57, 48, 51, 50, 54,
+            55, 50, 16, 2, 34, 29, 10, 27, 49, 48, 48, 50, 48, 48, 51, 48, 48, 52, 48, 48, 53, 48,
+            48, 54, 48, 48, 55, 48, 48, 56, 48, 48, 49, 48, 48, 42, 5, 8, 206, 194, 241, 5, 18, 49,
+            9, 0, 0, 0, 0, 0, 0, 240, 63, 16, 2, 24, 3, 32, 4, 40, 5, 48, 12, 56, 14, 69, 8, 0, 0,
+            0, 73, 9, 0, 0, 0, 0, 0, 0, 0, 85, 10, 0, 0, 0, 89, 11, 0, 0, 0, 0, 0, 0, 0,
+        ];
+
+        let actual = decode_message(&buffer).unwrap();
+        assert_eq!(2, actual.len());
     }
 }
