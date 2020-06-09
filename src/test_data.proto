@@ -71,3 +71,8 @@ message Ta {
   Tb tb = 1;
 }
 
+message RepeatedValues { 
+   repeated string param1 = 1;
+   repeated int64 param2 = 2;
+   repeated bool param3 = 3;
+}

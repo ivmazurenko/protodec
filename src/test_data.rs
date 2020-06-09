@@ -2624,6 +2624,248 @@ impl ::protobuf::reflect::ProtobufValue for Ta_Tb_Tc {
     }
 }
 
+#[derive(PartialEq,Clone,Default)]
+pub struct RepeatedValues {
+    // message fields
+    pub param1: ::protobuf::RepeatedField<::std::string::String>,
+    pub param2: ::std::vec::Vec<i64>,
+    pub param3: ::std::vec::Vec<bool>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a RepeatedValues {
+    fn default() -> &'a RepeatedValues {
+        <RepeatedValues as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl RepeatedValues {
+    pub fn new() -> RepeatedValues {
+        ::std::default::Default::default()
+    }
+
+    // repeated string param1 = 1;
+
+
+    pub fn get_param1(&self) -> &[::std::string::String] {
+        &self.param1
+    }
+    pub fn clear_param1(&mut self) {
+        self.param1.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_param1(&mut self, v: ::protobuf::RepeatedField<::std::string::String>) {
+        self.param1 = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_param1(&mut self) -> &mut ::protobuf::RepeatedField<::std::string::String> {
+        &mut self.param1
+    }
+
+    // Take field
+    pub fn take_param1(&mut self) -> ::protobuf::RepeatedField<::std::string::String> {
+        ::std::mem::replace(&mut self.param1, ::protobuf::RepeatedField::new())
+    }
+
+    // repeated int64 param2 = 2;
+
+
+    pub fn get_param2(&self) -> &[i64] {
+        &self.param2
+    }
+    pub fn clear_param2(&mut self) {
+        self.param2.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_param2(&mut self, v: ::std::vec::Vec<i64>) {
+        self.param2 = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_param2(&mut self) -> &mut ::std::vec::Vec<i64> {
+        &mut self.param2
+    }
+
+    // Take field
+    pub fn take_param2(&mut self) -> ::std::vec::Vec<i64> {
+        ::std::mem::replace(&mut self.param2, ::std::vec::Vec::new())
+    }
+
+    // repeated bool param3 = 3;
+
+
+    pub fn get_param3(&self) -> &[bool] {
+        &self.param3
+    }
+    pub fn clear_param3(&mut self) {
+        self.param3.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_param3(&mut self, v: ::std::vec::Vec<bool>) {
+        self.param3 = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_param3(&mut self) -> &mut ::std::vec::Vec<bool> {
+        &mut self.param3
+    }
+
+    // Take field
+    pub fn take_param3(&mut self) -> ::std::vec::Vec<bool> {
+        ::std::mem::replace(&mut self.param3, ::std::vec::Vec::new())
+    }
+}
+
+impl ::protobuf::Message for RepeatedValues {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_repeated_string_into(wire_type, is, &mut self.param1)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_repeated_int64_into(wire_type, is, &mut self.param2)?;
+                },
+                3 => {
+                    ::protobuf::rt::read_repeated_bool_into(wire_type, is, &mut self.param3)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        for value in &self.param1 {
+            my_size += ::protobuf::rt::string_size(1, &value);
+        };
+        for value in &self.param2 {
+            my_size += ::protobuf::rt::value_size(2, *value, ::protobuf::wire_format::WireTypeVarint);
+        };
+        my_size += 2 * self.param3.len() as u32;
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        for v in &self.param1 {
+            os.write_string(1, &v)?;
+        };
+        for v in &self.param2 {
+            os.write_int64(2, *v)?;
+        };
+        for v in &self.param3 {
+            os.write_bool(3, *v)?;
+        };
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> RepeatedValues {
+        RepeatedValues::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy::INIT;
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "param1",
+                    |m: &RepeatedValues| { &m.param1 },
+                    |m: &mut RepeatedValues| { &mut m.param1 },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_vec_accessor::<_, ::protobuf::types::ProtobufTypeInt64>(
+                    "param2",
+                    |m: &RepeatedValues| { &m.param2 },
+                    |m: &mut RepeatedValues| { &mut m.param2 },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_vec_accessor::<_, ::protobuf::types::ProtobufTypeBool>(
+                    "param3",
+                    |m: &RepeatedValues| { &m.param3 },
+                    |m: &mut RepeatedValues| { &mut m.param3 },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new_pb_name::<RepeatedValues>(
+                    "RepeatedValues",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static RepeatedValues {
+        static mut instance: ::protobuf::lazy::Lazy<RepeatedValues> = ::protobuf::lazy::Lazy::INIT;
+        unsafe {
+            instance.get(RepeatedValues::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for RepeatedValues {
+    fn clear(&mut self) {
+        self.param1.clear();
+        self.param2.clear();
+        self.param3.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for RepeatedValues {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for RepeatedValues {
+    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
+        ::protobuf::reflect::ReflectValueRef::Message(self)
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x0ftest_data.proto\x12\x08protodec\x1a\x1fgoogle/protobuf/timestamp.p\
     roto\"\xbb\x02\n\x06Person\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\
@@ -2656,7 +2898,9 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x02Tb\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\x14\n\x05email\
     \x18\x03\x20\x01(\tR\x05email\x12$\n\x03tcs\x18\x04\x20\x03(\x0b2\x12.pr\
     otodec.Ta.Tb.TcR\x03tcs\x1a\x1c\n\x02Tc\x12\x16\n\x06number\x18\x01\x20\
-    \x01(\tR\x06numberb\x06proto3\
+    \x01(\tR\x06number\"X\n\x0eRepeatedValues\x12\x16\n\x06param1\x18\x01\
+    \x20\x03(\tR\x06param1\x12\x16\n\x06param2\x18\x02\x20\x03(\x03R\x06para\
+    m2\x12\x16\n\x06param3\x18\x03\x20\x03(\x08R\x06param3b\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy::INIT;

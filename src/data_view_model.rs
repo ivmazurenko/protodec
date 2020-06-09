@@ -463,4 +463,22 @@ mod tests {
             assert_variant!(items[0], DataViewModel::Message {..});
         }
     }
+    #[test]
+    fn does_not_fail_for_empty_object() {
+        let repeated_values = RepeatedValues::new();
+
+        let buffer = repeated_values.write_to_bytes().unwrap();
+
+        let mut vm = DataViewModel::Chunk {
+            field_number: 0,
+            uuid: Uuid::new_v4(),
+            decode_as_message_button_state: button::State::new(),
+            decode_as_utf8_button_state: button::State::new(),
+            buffer,
+        };
+
+        if let DataViewModel::Chunk { uuid, .. } = vm {
+            vm.decode_as_message(uuid.clone());
+        }
+    }
 }
