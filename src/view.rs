@@ -46,15 +46,14 @@ pub fn view_decoding_state_recoursive(decoding_state: &DecodingState) -> Node<Ui
 
     let kind = decoding_state.get_formatted_kind();
     div![
-        div![field_number.to_string(),],
-        div![kind.to_string(),],
+        div![format!("{} {}", field_number.to_string(), kind.to_string())],
         match decoding_state {
             DecodingState::Varint {
                 value, uuid, kind, ..
             } => {
                 let uuid = uuid.clone();
                 div![
-                    div![kind.get_value_as_string(*value)],
+                    div![pre! {kind.get_value_as_string(*value)}],
                     div![button! {"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid)) },],
                 ]
             }
@@ -64,7 +63,7 @@ pub fn view_decoding_state_recoursive(decoding_state: &DecodingState) -> Node<Ui
             } => {
                 let uuid = uuid.clone();
                 div![
-                    div![kind.get_value_as_string(buffer)],
+                    div![pre! {kind.get_value_as_string(buffer)}],
                     div![button! {"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid)) },],
                 ]
             }
@@ -74,13 +73,13 @@ pub fn view_decoding_state_recoursive(decoding_state: &DecodingState) -> Node<Ui
             } => {
                 let uuid = uuid.clone();
                 div![
-                    div![kind.get_value_as_string(buffer)],
+                    div![pre! {kind.get_value_as_string(buffer)}],
                     div![button! {"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid)) },],
                 ]
             }
 
             DecodingState::Utf8String { value, .. } => {
-                div![value]
+                div![pre! {value}]
             }
 
             DecodingState::Chunk { buffer, uuid, .. } => {
@@ -89,7 +88,7 @@ pub fn view_decoding_state_recoursive(decoding_state: &DecodingState) -> Node<Ui
                 let value_text = format::format_as_ascii_and_hex(buffer);
 
                 div![
-                    div![value_text],
+                    div![pre! {value_text}],
                     div![
                         button! {"MESG", ev(Ev::Click, move |_| UiMessage::DecodeChunkAsMessage(uuid)) },
                     ],
