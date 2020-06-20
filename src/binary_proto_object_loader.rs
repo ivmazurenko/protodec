@@ -1,8 +1,8 @@
 use crate::{error::ProtodecError, test_data::*};
 use protobuf::Message;
-use std::path::PathBuf;
+use std::num::ParseIntError;
 
-pub async fn load_test_proto_object() -> Result<Vec<u8>, ProtodecError> {
+pub fn load_test_proto_object() -> Result<Vec<u8>, ProtodecError> {
     let mut person = Person::new();
 
     person.set_name("Ivan".into());
@@ -49,17 +49,8 @@ pub async fn load_test_proto_object() -> Result<Vec<u8>, ProtodecError> {
 
     let buffer = big_object.write_to_bytes().unwrap();
 
-    tokio::fs::write("serialized_proto_object", &buffer).await?;
-
     Ok(buffer)
 }
-
-pub async fn load_file_from_fs(path: PathBuf) -> Result<Vec<u8>, ProtodecError> {
-    let buffer = tokio::fs::read(path).await?;
-    Ok(buffer)
-}
-
-use std::num::ParseIntError;
 
 pub fn parse_u8_vec_from_string_with_integers<T: Into<String>>(
     source: T,

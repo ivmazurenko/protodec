@@ -4,19 +4,7 @@ A graphical tool to parse and analyze [Google Protobuf][] messages without knowi
 
 Instead of trying to predict internal structure of the binary message, this tool allows to select the type of nested data from the ui. Anyway, if any chunk of data can not be decoded, user will see the raw binary data of a field. 
 
-The [Iced][] framework is used to draw UI.
-
-#### Example screencast:
-
-![Main screencast](./screencast.gif)
-
-#### Usage:
-
-Build with a cargo as usual. Currently you can pass the binary file as argument parameter:
-
-```
-$ ./protodec serialized_proto_object
-```
+The [Seed] with [newcss][] framework are used to draw UI.
 
 For now this program it is not fully finished. Any suggestions and PR are welcome.
 
@@ -33,4 +21,5 @@ For now this program it is not fully finished. Any suggestions and PR are welcom
 
 [protobuf-inspector]: https://github.com/mildsunrise/protobuf-inspector
 [Google Protobuf]: https://developers.google.com/protocol-buffers
-[Iced]: https://github.com/hecrj/iced
+[new.css]: https://newcss.net
+[Seed]: https://github.com/seed-rs/seed

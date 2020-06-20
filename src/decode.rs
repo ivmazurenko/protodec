@@ -3,6 +3,10 @@ use crate::{data, data::Data, error::ProtodecError, key};
 pub fn decode_message(buffer: &[u8]) -> Result<Vec<Data>, ProtodecError> {
     let mut result: Vec<Data> = vec![];
 
+    if buffer.len() == 0 {
+        return Ok(result);
+    }
+
     let mut buf = buffer;
 
     loop {
