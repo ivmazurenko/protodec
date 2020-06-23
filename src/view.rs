@@ -22,7 +22,7 @@ impl ProtoDec {
 
 pub fn view_initial_state(initial_state: &InitialState) -> Node<UiMessage> {
     div![
-        label!["Put array of bytes as integers, like 0, 1, 255:"],
+        label!["Put array of bytes as integers, for example 10, 8, 74, 111, 104, 110, 32, 68, 111, 101, 16, 30"],
         textarea! {
             attrs! {
                 At::Value => initial_state.input,

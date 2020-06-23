@@ -76,3 +76,8 @@ message RepeatedValues {
    repeated int64 param2 = 2;
    repeated bool param3 = 3;
 }
+
+message ShortMessageForExample {
+  string name = 1;
+  int32 age = 2;
+}

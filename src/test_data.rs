@@ -2866,6 +2866,204 @@ impl ::protobuf::reflect::ProtobufValue for RepeatedValues {
     }
 }
 
+#[derive(PartialEq,Clone,Default)]
+pub struct ShortMessageForExample {
+    // message fields
+    pub name: ::std::string::String,
+    pub age: i32,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a ShortMessageForExample {
+    fn default() -> &'a ShortMessageForExample {
+        <ShortMessageForExample as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl ShortMessageForExample {
+    pub fn new() -> ShortMessageForExample {
+        ::std::default::Default::default()
+    }
+
+    // string name = 1;
+
+
+    pub fn get_name(&self) -> &str {
+        &self.name
+    }
+    pub fn clear_name(&mut self) {
+        self.name.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_name(&mut self, v: ::std::string::String) {
+        self.name = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_name(&mut self) -> &mut ::std::string::String {
+        &mut self.name
+    }
+
+    // Take field
+    pub fn take_name(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.name, ::std::string::String::new())
+    }
+
+    // int32 age = 2;
+
+
+    pub fn get_age(&self) -> i32 {
+        self.age
+    }
+    pub fn clear_age(&mut self) {
+        self.age = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_age(&mut self, v: i32) {
+        self.age = v;
+    }
+}
+
+impl ::protobuf::Message for ShortMessageForExample {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.name)?;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_int32()?;
+                    self.age = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.name.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.name);
+        }
+        if self.age != 0 {
+            my_size += ::protobuf::rt::value_size(2, self.age, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        if !self.name.is_empty() {
+            os.write_string(1, &self.name)?;
+        }
+        if self.age != 0 {
+            os.write_int32(2, self.age)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> ShortMessageForExample {
+        ShortMessageForExample::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy::INIT;
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "name",
+                    |m: &ShortMessageForExample| { &m.name },
+                    |m: &mut ShortMessageForExample| { &mut m.name },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeInt32>(
+                    "age",
+                    |m: &ShortMessageForExample| { &m.age },
+                    |m: &mut ShortMessageForExample| { &mut m.age },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new_pb_name::<ShortMessageForExample>(
+                    "ShortMessageForExample",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static ShortMessageForExample {
+        static mut instance: ::protobuf::lazy::Lazy<ShortMessageForExample> = ::protobuf::lazy::Lazy::INIT;
+        unsafe {
+            instance.get(ShortMessageForExample::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for ShortMessageForExample {
+    fn clear(&mut self) {
+        self.name.clear();
+        self.age = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for ShortMessageForExample {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for ShortMessageForExample {
+    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
+        ::protobuf::reflect::ReflectValueRef::Message(self)
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x0ftest_data.proto\x12\x08protodec\x1a\x1fgoogle/protobuf/timestamp.p\
     roto\"\xbb\x02\n\x06Person\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\
@@ -2900,7 +3098,9 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     otodec.Ta.Tb.TcR\x03tcs\x1a\x1c\n\x02Tc\x12\x16\n\x06number\x18\x01\x20\
     \x01(\tR\x06number\"X\n\x0eRepeatedValues\x12\x16\n\x06param1\x18\x01\
     \x20\x03(\tR\x06param1\x12\x16\n\x06param2\x18\x02\x20\x03(\x03R\x06para\
-    m2\x12\x16\n\x06param3\x18\x03\x20\x03(\x08R\x06param3b\x06proto3\
+    m2\x12\x16\n\x06param3\x18\x03\x20\x03(\x08R\x06param3\">\n\x16ShortMess\
+    ageForExample\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\x10\n\
+    \x03age\x18\x02\x20\x01(\x05R\x03ageb\x06proto3\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy::INIT;

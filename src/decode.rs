@@ -169,4 +169,17 @@ mod tests {
         let actual = decode_message(&buffer).unwrap();
         assert_eq!(2, actual.len());
     }
+
+    #[test]
+    fn parses_small_object_for_example() {
+        let mut object = ShortMessageForExample::new();
+        object.set_name("John Doe".into());
+        object.set_age(30);
+        let buffer = object.write_to_bytes().unwrap();
+
+        // These bytes will be presented under the text input as a example
+        // println!("{:?}", buffer);
+
+        decode_message(&buffer).unwrap();
+    }
 }
