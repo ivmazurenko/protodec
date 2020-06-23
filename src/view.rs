@@ -8,11 +8,14 @@ use seed::{prelude::*, *};
 impl ProtoDec {
     pub fn view(&self) -> Node<UiMessage> {
         div! {
-            h1!{"Protobuf Decoder"},
+            header!{
+                h1!{"Protobuf Decoder"},
+                p!["A graphical tool to parse and analyze Google Protobuf messages without knowing their definition."]
+            },
             match self {
                 ProtoDec::InitialState(initial_state) => view_initial_state(initial_state),
                 ProtoDec::Decoding(decoding_state) => view_decoding_state(decoding_state)
-            }
+            },
         }
     }
 }
@@ -29,11 +32,11 @@ pub fn view_initial_state(initial_state: &InitialState) -> Node<UiMessage> {
             input_ev(Ev::Input, UiMessage::InitialStateInputChanged)
         },
         br![],
-        button! {"next", ev(Ev::Click, |_| UiMessage::ProcessByteArray),},
+        button! {"Open bytes array", ev(Ev::Click, |_| UiMessage::ProcessByteArray),},
         br![],
         label!["or"],
         br![],
-        button! {"open debugging file", ev(Ev::Click, |_| UiMessage::OpenFile),},
+        button! {"Open debugging file", ev(Ev::Click, |_| UiMessage::OpenFile),},
     ]
 }
 
@@ -46,65 +49,87 @@ pub fn view_decoding_state_recoursive(decoding_state: &DecodingState) -> Node<Ui
 
     let kind = decoding_state.get_formatted_kind();
     div![
-        div![format!("{} {}", field_number.to_string(), kind.to_string())],
-        match decoding_state {
-            DecodingState::Varint {
-                value, uuid, kind, ..
-            } => {
-                let uuid = uuid.clone();
-                div![
-                    div![pre! {kind.get_value_as_string(*value)}],
-                    div![button! {"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid)) },],
-                ]
-            }
-
-            DecodingState::Fixed64 {
-                buffer, uuid, kind, ..
-            } => {
-                let uuid = uuid.clone();
-                div![
-                    div![pre! {kind.get_value_as_string(buffer)}],
-                    div![button! {"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid)) },],
-                ]
-            }
-
-            DecodingState::Fixed32 {
-                buffer, uuid, kind, ..
-            } => {
-                let uuid = uuid.clone();
-                div![
-                    div![pre! {kind.get_value_as_string(buffer)}],
-                    div![button! {"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid)) },],
-                ]
-            }
-
-            DecodingState::Utf8String { value, .. } => {
-                div![pre! {value}]
-            }
-
-            DecodingState::Chunk { buffer, uuid, .. } => {
-                let uuid = uuid.clone();
-
-                let value_text = format::format_as_ascii_and_hex(buffer);
-
-                div![
-                    div![pre! {value_text}],
-                    div![
-                        button! {"MESG", ev(Ev::Click, move |_| UiMessage::DecodeChunkAsMessage(uuid)) },
-                    ],
-                    div![
-                        button! {"UTF8", ev(Ev::Click, move |_| UiMessage::DecodeChunkAsUtf8String(uuid)) },
-                    ],
-                ]
-            }
-
-            DecodingState::Message { items, .. } => {
-                let items = items
-                    .iter()
-                    .map(|item| li! {view_decoding_state_recoursive(item)});
-
-                ul![items]
-            }
-        }
+        div![
+            div![
+                C!["im_inline_block"],
+                format!("{} {}", field_number.to_string(), kind.to_string())
+            ],
+            div![C!["im_inline_block"], view_action_buttons(decoding_state)],
+        ],
+        div![view_value(decoding_state)]
     ]
+}
+
+pub fn view_value(decoding_state: &DecodingState) -> Node<UiMessage> {
+    match decoding_state {
+        DecodingState::Varint { value, kind, .. } => {
+            pre! {kind.get_value_as_string(*value)}
+        }
+
+        DecodingState::Fixed64 { buffer, kind, .. } => {
+            pre! {kind.get_value_as_string(buffer)}
+        }
+
+        DecodingState::Fixed32 { buffer, kind, .. } => {
+            pre! {kind.get_value_as_string(buffer)}
+        }
+
+        DecodingState::Utf8String { value, .. } => {
+            pre! {value}
+        }
+
+        DecodingState::Chunk { buffer, .. } => {
+            pre! {format::format_as_ascii_and_hex(buffer)}
+        }
+
+        DecodingState::Message { items, .. } => {
+            let items = items
+                .iter()
+                .map(|item| li! {view_decoding_state_recoursive(item)});
+
+            ul![C!["im_list_style_none"], items]
+        }
+    }
+}
+
+pub fn view_action_buttons(decoding_state: &DecodingState) -> Node<UiMessage> {
+    div![match decoding_state {
+        DecodingState::Varint { uuid, .. } => {
+            let uuid = uuid.clone();
+            div![
+                button! {C!["im_button_size"],"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid))},
+            ]
+        }
+
+        DecodingState::Fixed64 { uuid, .. } => {
+            let uuid = uuid.clone();
+            div![
+                button! {C!["im_button_size"],"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid))},
+            ]
+        }
+
+        DecodingState::Fixed32 { uuid, .. } => {
+            let uuid = uuid.clone();
+            div![
+                button! {C!["im_button_size"],"Toggle", ev(Ev::Click, move |_| UiMessage::Toggle(uuid))},
+            ]
+        }
+
+        DecodingState::Utf8String { .. } => {
+            div![]
+        }
+
+        DecodingState::Chunk { uuid, .. } => {
+            let uuid = uuid.clone();
+
+            div![
+                button! {C!["im_button_size"], "Message", ev(Ev::Click, move |_| UiMessage::DecodeChunkAsMessage(uuid)) },
+                button! {C!["im_button_size"], "UTF-8", ev(Ev::Click, move |_| UiMessage::DecodeChunkAsUtf8String(uuid)) },
+            ]
+        }
+
+        DecodingState::Message { .. } => {
+            div![]
+        }
+    }]
 }

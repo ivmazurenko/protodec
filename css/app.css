@@ -1,3 +1,14 @@
-ul {
+ul.im_list_style_none {
     list-style: none;
+}
+
+div.im_inline_block {
+    display:inline-block;
+}
+
+button.im_button_size {
+    margin-left: 6px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 4px;
 }
