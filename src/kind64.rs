@@ -46,17 +46,3 @@ impl Kind64 {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn toggles_itself_in_cycle() {
-        let kind = Kind64::Buffer;
-
-        let actual = kind.toggle().toggle().toggle().toggle();
-
-        assert_eq!(actual, kind);
-    }
-}

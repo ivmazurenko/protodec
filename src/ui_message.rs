@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub enum UiMessage {
-    OpenFile,
+    OpenFile, // not used
     InitialStateInputChanged(String),
     ProcessByteArray,
     FileLoaded(Result<Vec<u8>, ProtodecError>),

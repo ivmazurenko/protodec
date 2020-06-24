@@ -8,13 +8,11 @@ pub mod kind32;
 pub mod kind64;
 pub mod kind_varint;
 pub mod model;
-pub mod test_data;
 pub mod ui_message;
 pub mod update;
 pub mod varint;
 pub mod view;
 pub mod wire_type;
-
 use crate::model::ProtoDec;
 use seed::{prelude::*, *};
 
@@ -29,22 +27,4 @@ pub fn start() {
 }
 
 #[cfg(test)]
-mod tests {
-    #[macro_export]
-    macro_rules! assert_variant {
-        ($value:expr, $pattern:pat) => {{
-            let value = &$value;
-
-            if let $pattern = value {
-            } else {
-                panic!(
-                    r#"assertion failed (value doesn't match pattern):
-	value: `{:?}`,
-	pattern: `{}`"#,
-                    value,
-                    stringify!($pattern)
-                )
-            }
-        }};
-    }
-}
+mod tests;

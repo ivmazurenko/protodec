@@ -34,9 +34,6 @@ pub fn view_initial_state(initial_state: &InitialState) -> Node<UiMessage> {
         br![],
         button! {"Open bytes array", ev(Ev::Click, |_| UiMessage::ProcessByteArray),},
         br![],
-        label!["or"],
-        br![],
-        button! {"Open debugging file", ev(Ev::Click, |_| UiMessage::OpenFile),},
     ]
 }
 
