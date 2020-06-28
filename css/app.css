@@ -12,3 +12,13 @@ button.im_button_size {
     margin-bottom: 2px;
     padding: 4px;
 }
+
+div.im_drop_zone {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #E5E7EB;
+    border-radius: 4px;
+}

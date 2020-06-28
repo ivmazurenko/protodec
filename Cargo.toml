@@ -17,6 +17,7 @@ protobuf = { version = "2" }
 seed = { git = "https://github.com/seed-rs/seed", rev = "0a538f0" }
 uuid = { version ="*",  features = ["v4"] }
 byteorder = "*"
+wasm-bindgen-futures = "0.4.13"
 
 [build-dependencies]
 protoc-rust = "2.14.0"

@@ -1,12 +1,17 @@
-use crate::error::ProtodecError;
+use crate::web_sys::FileList;
 use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub enum UiMessage {
-    OpenFile, // not used
+    InitialStateDragEnter,
+    InitialStateDragOver,
+    InitialStateDragLeave,
+    InitialStateDrop(FileList),
+    InitialStateFileRead { file_name: String, buffer: Vec<u8> },
+    //
     InitialStateInputChanged(String),
     ProcessByteArray,
-    FileLoaded(Result<Vec<u8>, ProtodecError>),
+    ProcessUploadedFile,
     DecodeChunkAsMessage(Uuid),
     DecodeChunkAsUtf8String(Uuid),
     Toggle(Uuid),

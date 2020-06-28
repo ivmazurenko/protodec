@@ -390,6 +390,7 @@ dependencies = [
  "protoc-rust",
  "seed",
  "uuid",
+ "wasm-bindgen-futures",
  "wasm-bindgen-test",
 ]
 

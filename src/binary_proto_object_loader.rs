@@ -22,7 +22,7 @@ pub fn parse_u8_vec_from_string_with_integers<T: Into<String>>(
         .replace(' ', "")
         .replace('\n', "")
         .replace('\t', "")
-        .split(",")
+        .split(',')
         .map(|x| x.parse::<u8>())
         .collect()
 }

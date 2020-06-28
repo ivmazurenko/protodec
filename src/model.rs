@@ -8,14 +8,23 @@ pub enum ProtoDec {
 
 pub struct InitialState {
     pub input: String,
+    pub drop_zone_active: bool,
+    pub uploaded_file: Option<File>,
 }
 
 impl ProtoDec {
     pub fn new() -> Self {
         ProtoDec::InitialState(InitialState {
             input: String::new(),
+            drop_zone_active: false,
+            uploaded_file: None,
         })
     }
+}
+
+pub struct File {
+    pub file_name: String,
+    pub buffer: Vec<u8>,
 }
 
 #[derive(Debug, Clone)]

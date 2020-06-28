@@ -1,29 +1,71 @@
-use crate::{binary_proto_object_loader, data::Data, model::ProtoDec, ui_message::UiMessage};
+use crate::{
+    binary_proto_object_loader, data::Data, model::File, model::ProtoDec, ui_message::UiMessage,
+};
+use js_sys::Uint8Array;
 use seed::prelude::*;
+use wasm_bindgen_futures::JsFuture;
 
 impl ProtoDec {
     pub fn update(&mut self, message: UiMessage, orders: &mut impl Orders<UiMessage>) {
         match message {
-            UiMessage::OpenFile => {
-                if let ProtoDec::InitialState(_) = self {
-                    orders.send_msg(UiMessage::FileLoaded(
-                        binary_proto_object_loader::load_test_proto_object(),
-                    ));
+            UiMessage::InitialStateDragEnter => {
+                if let ProtoDec::InitialState(initial_state) = self {
+                    initial_state.drop_zone_active = true;
                 }
             }
 
-            UiMessage::FileLoaded(x) => match x {
-                Ok(buffer) => {
-                    *self = ProtoDec::Decoding(
-                        Data::Chunk {
-                            buffer,
-                            field_number: 0,
-                        }
-                        .into(),
-                    );
+            UiMessage::InitialStateDragOver => (),
+
+            UiMessage::InitialStateDragLeave => {
+                if let ProtoDec::InitialState(initial_state) = self {
+                    initial_state.drop_zone_active = false;
                 }
-                Err(e) => panic!(e),
-            },
+            }
+
+            UiMessage::InitialStateDrop(file_list) => {
+                if let ProtoDec::InitialState(initial_state) = self {
+                    initial_state.drop_zone_active = false;
+                    initial_state.uploaded_file = None;
+
+                    let file = file_list.get(0).expect("cant get 0 file");
+
+                    orders.perform_cmd(async move {
+                        let array_buffer: JsValue = JsFuture::from(file.array_buffer())
+                            .await
+                            .expect("read file");
+
+                        let data = Uint8Array::new(&array_buffer);
+                        let mut buffer = vec![0; data.length() as usize];
+                        data.copy_to(&mut buffer);
+
+                        UiMessage::InitialStateFileRead {
+                            file_name: format!("{} - {} bytes", file.name(), file.size()),
+                            buffer,
+                        }
+                    });
+                }
+            }
+
+            UiMessage::InitialStateFileRead { file_name, buffer } => {
+                if let ProtoDec::InitialState(initial_state) = self {
+                    initial_state.uploaded_file = Some(File { file_name, buffer })
+                }
+            }
+
+            UiMessage::ProcessUploadedFile => {
+                if let ProtoDec::InitialState(initial_state) = self {
+                    if let Some(uploaded_file) = &initial_state.uploaded_file {
+                        let buffer = uploaded_file.buffer.clone();
+                        *self = ProtoDec::Decoding(
+                            Data::Chunk {
+                                buffer,
+                                field_number: 0,
+                            }
+                            .into(),
+                        );
+                    }
+                }
+            }
 
             UiMessage::ProcessByteArray => {
                 if let ProtoDec::InitialState(initial_state) = self {
