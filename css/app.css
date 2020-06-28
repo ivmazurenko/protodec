@@ -22,3 +22,21 @@ div.im_drop_zone {
     border: 1px solid #E5E7EB;
     border-radius: 4px;
 }
+
+div.im_footer_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+footer.im_footer {
+    margin-top: 300px;
+}
+
+.im_footer_row {
+    margin-left: 20px;
+}
+
+.im_footer_name {
+    color: lightgray;
+}

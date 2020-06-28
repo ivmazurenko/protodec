@@ -26,6 +26,23 @@ impl ProtoDec {
                 ProtoDec::InitialState(initial_state) => view_initial_state(initial_state),
                 ProtoDec::Decoding(decoding_state) => view_decoding_state(decoding_state)
             },
+            footer![
+                C!{"im_footer"},
+                hr!{},
+                div![
+                    C!{"im_footer_content"},
+                    span!{
+                        C!{"im_footer_name"},
+                        "Ilia Mazurenko 2020"},
+                    a!{
+                        C!{"im_footer_row"},
+                        attrs! {
+                            At::Href => "https://github.com/ivmazurenko/protodec",
+                        },
+                        "Github Repository"
+                    },
+                ]
+            ]
         }
     }
 }
